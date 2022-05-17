@@ -12,4 +12,8 @@ default allow = false
 
 route = input.route
 
-required-roles = data.policy.route
+allow {
+  roles = data.policy.route[policy_route]
+  regex.match(policy_route, request_route)
+  roles[_] == token.roles[_]
+}
