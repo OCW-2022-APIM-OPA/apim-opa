@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.191.1/containers/typescript-node
 {
-	"name": "OPA workshop",
+	"name": "OPA and APIM",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspace",
@@ -17,7 +17,8 @@
 		"yzhang.markdown-all-in-one",
 		"davidanson.vscode-markdownlint",
 		"streetsidesoftware.code-spell-checker",
-		"tsandall.opa"
+		"tsandall.opa",
+		"ms-azuretools.vscode-bicep"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
