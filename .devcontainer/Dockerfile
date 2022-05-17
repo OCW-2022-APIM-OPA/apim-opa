@@ -1,7 +1,8 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.191.1/containers/typescript-node/.devcontainer/base.Dockerfile
 
-ARG VARIANT=3.1
-FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
+# [Choice] Node.js version: 16, 14, 12
+ARG VARIANT="16-buster"
+FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
@@ -12,7 +13,7 @@ ARG ENABLE_NONROOT_DOCKER="true"
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your
 # own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
-ARG USERNAME="automatic"
+ARG USERNAME=automatic
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 COPY library-scripts/*.sh /tmp/library-scripts/
