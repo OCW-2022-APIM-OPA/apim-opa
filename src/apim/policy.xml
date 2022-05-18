@@ -1,0 +1,20 @@
+<inbound>
+  <!-- Extract Token from Authorization header parameter -->
+  <set-variable name="token" value="@(context.Request.Headers.GetValueOrDefault("Authorization","scheme param").Split(' ').Last())" />
+
+  <send-request mode="new" response-variable-name="opaauth" timeout="20" ignore-error="true">
+    <set-url>https://opa.icyriver-e6021c38.eastus.azurecontainerapps.io/v1/data/rbac</set-url>
+    <set-method>POST</set-method>
+    <set-header name="Content-Type" exists-action="override">
+      <value>application/json</value>
+    </set-header>
+    <set-body>@{ 
+            JObject body = new JObject(); 
+            body.Add(new JProperty("token", ((string)context.Variables["token"])));
+            body.Add(new JProperty("operation", ((string)context.Variables["token"])));
+            return body.ToString(); 
+        }
+    </set-body>
+  </send-request>
+
+</inbound>
