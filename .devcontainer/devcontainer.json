@@ -17,7 +17,8 @@
 		"yzhang.markdown-all-in-one",
 		"davidanson.vscode-markdownlint",
 		"streetsidesoftware.code-spell-checker",
-		"tsandall.opa"
+		"tsandall.opa",
+		"ms-azuretools.vscode-apimanagement"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
