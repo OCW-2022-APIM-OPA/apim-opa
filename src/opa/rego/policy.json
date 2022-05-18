@@ -1,7 +1,7 @@
 {
   "authorization_rules": [    
-    {"route": "/users", "roles": ["admin"]},
-    {"route": "/order", "roles": ["contributor"]},
-    {"route": "/users/*/friends", "roles": ["admin", "contributor"]}
+    {"route": "/conference/speakers", "roles": ["admin"]},
+    {"route": "/conference/sessions", "roles": ["contributor"]},
+    {"route": "/*/topics", "roles": ["admin", "contributor"]}
   ]
 }

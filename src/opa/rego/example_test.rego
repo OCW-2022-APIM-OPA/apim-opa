@@ -32,62 +32,50 @@ empty_token := io.jwt.encode_sign({
 })
 
 ### Execute tests
-test_users_true {
+test_speakers_true {
   allow with input as {
-    "input": {
-      "token": admin_token,
-      "route": "/users",
-      "operation": "GET"
-    }
+    "token": admin_token,
+    "route": "/conference/speakers",
+    "operation": "GET"
   }
 }
 
-test_users_false {
+test_speakers_false {
   not allow with input as {
-    "input": {
-      "token": empty_token,
-      "route": "/users",
-      "operation": "GET"
-    }
+    "token": empty_token,
+    "route": "/conference/speakers",
+    "operation": "GET"
   }
 }
 
-test_order_true {
+test_sessions_true {
   allow with input as {
-    "input": {
-      "token": contributor_token,
-      "route": "/order",
-      "operation": "GET"
-    }
+    "token": contributor_token,
+    "route": "/conference/sessions",
+    "operation": "GET"
   }
 }
 
-test_order_false {
+test_sessions_false {
   not allow with input as {
-    "input": {
-      "token": admin_token,
-      "route": "/order",
-      "operation": "GET"
-    }
+    "token": admin_token,
+    "route": "/conference/sessions",
+    "operation": "GET"
   }
 }
 
-test_userFriends_true {
+test_topics_true {
   allow with input as {
-    "input": {
-      "token": admin_token,
-      "route": "/users/1234/friends",
-      "operation": "GET"
-    }
+    "token": admin_token,
+    "route": "/conference/topics",
+    "operation": "GET"
   }
 }
 
-test_userFriends_false {
+test_topics_false {
   not allow with input as {
-    "input": {
-      "token": admin_token,
-      "route": "/users/1234/strangers",
-      "operation": "GET"
-    }
+    "token": admin_token,
+    "route": "/conference/topics/1234",
+    "operation": "GET"
   }
 }
