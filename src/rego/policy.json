@@ -1,7 +1,0 @@
-{
-  "authorization_rules": [
-    {"route": "/user/*/friends", "roles": ["admin", "contributor"]},
-    {"route": "/user", "roles": ["admin"]},
-    {"route": "/order", "roles": ["contributor"]}
-  ]
-}
