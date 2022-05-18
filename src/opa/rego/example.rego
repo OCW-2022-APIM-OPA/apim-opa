@@ -2,10 +2,12 @@ package rbac
 
 import input
 
-# io.jwt.decode takes one argument (the encoded token) and has three outputs:
-# the decoded header, payload and signature, in that order. Our policy only
-# cares about the payload, so we ignore the others.
 token = {"header": header, "payload": payload, "signature": signature} { io.jwt.decode(input.token, [header, payload, signature]) }
 
-# By default, we deny the request
 default allow = false
+
+allow {
+  some i
+  glob.match(data.authorization_rules[i].route, [], input.route)
+  data.authorization_rules[i].roles[_] == token.payload.roles[_]
+}
