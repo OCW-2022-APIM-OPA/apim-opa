@@ -1,4 +1,6 @@
-admin_token := io.jwt.encode_sing({
+package rbac
+
+admin_token := io.jwt.encode_sign({
   "typ": "JWT",
   "alg": "HS256"
 }, {
@@ -6,7 +8,7 @@ admin_token := io.jwt.encode_sing({
     "admin"
   }
 }, {
-  "kty": "oct",{
+  "kty": "oct",
   "k": "test-signing-key"
 })
 
