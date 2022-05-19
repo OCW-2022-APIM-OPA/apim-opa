@@ -1,0 +1,17 @@
+services:
+  azure_storage_account:
+    url: https://opaoottka.blob.core.windows.net
+    headers:
+      x-ms-version: 2017-11-09
+    response_header_timeout_seconds: 5
+#    credentials:
+#      azure_managed_identity: {}
+
+bundles:
+  authz:
+    service: azure_storage_account
+    resource: opa-policies/bundle.tar.gz
+    persist: true
+    polling:
+      min_delay_seconds: 60
+      max_delay_seconds: 120
