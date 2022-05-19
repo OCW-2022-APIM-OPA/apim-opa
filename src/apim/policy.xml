@@ -1,13 +1,24 @@
-   <inbound>
-        <!-- Extract Token from Authorization header parameter -->
-        <set-variable name="token" value="@(context.Request.Headers.GetValueOrDefault("Authorization","scheme param").Split(' ').Last())" />
-        <send-request mode="new" response-variable-name="opaauth" timeout="20" ignore-error="true">
-            <set-url>https://opa.icyriver-e6021c38.eastus.azurecontainerapps.io/v1/data/rbac</set-url>
-            <set-method>POST</set-method>
-            <set-header name="Content-Type" exists-action="override">
-                <value>application/json</value>
-            </set-header>
-            <set-body>@{ 
+	<inbound>
+		<!-- Extract Token from Authorization header parameter -->
+		<set-variable name="token" value="@(context.Request.Headers.GetValueOrDefault("Authorization","scheme param").Split(' ').Last())" />
+		<validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid." output-token-variable-name="token">
+            <openid-config url="https://login.microsoftonline.com/{{tenantid}}/v2.0/.well-known/openid-configuration" />
+            <audiences>
+                <audience>{{apiregistrationappid}}</audience>
+            </audiences>
+            <required-claims>
+                <claim name="scp" match="any" separator=" ">
+                    <value>user_impersonation</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+		<send-request mode="new" response-variable-name="opaauth" timeout="20" ignore-error="true">
+			<set-url>https://opa.icyriver-e6021c38.eastus.azurecontainerapps.io/v1/data/rbac</set-url>
+			<set-method>POST</set-method>
+			<set-header name="Content-Type" exists-action="override">
+				<value>application/json</value>
+			</set-header>
+			<set-body>@{ 
                     JObject input = new JObject(); 
                     input.Add(new JProperty("token", ((string)context.Variables["token"])));
                     input.Add(new JProperty("operation", ((string)context.Request.Method)));
@@ -16,18 +27,19 @@
                     JObject body = new JObject{{"input", input}};
                     return body.ToString(); 
                 }</set-body>
-        </send-request>
-        <choose>
-            <!-- Check active property in response -->
-            <when condition="@((bool)((IResponse)context.Variables["opaauth"]).Body.As<JObject>()["result"]["allow"] == false)">
-                <!-- Return 401 Unauthorized with http-problem payload -->
-                <return-response>
-                    <set-status code="403" reason="Unauthorized" />
-                    <set-header name="WWW-Authenticate" exists-action="override">
-                        <value>Bearer error="invalid_token"</value>
-                    </set-header>
-                </return-response>
-            </when>
-        </choose>
-        <base />
-    </inbound>
+		</send-request>
+		<choose>
+			<!-- Check active property in response -->
+			<when condition="@((bool)((IResponse)context.Variables["opaauth"]).Body.As<JObject>()["result"]["allow"] == false)">
+				<!-- Return 401 Unauthorized with http-problem payload -->
+				<return-response>
+					<set-status code="403" reason="Unauthorized" />
+					<set-header name="WWW-Authenticate" exists-action="override">
+						<value>Bearer error="invalid_token"</value>
+					</set-header>
+				</return-response>
+			</when>
+		</choose>
+		<base />
+	</inbound>
+    
