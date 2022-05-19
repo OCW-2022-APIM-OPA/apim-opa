@@ -1,7 +1,8 @@
 {
   "authorization_rules": [    
     {"route": "/speakers", "roles": ["admin"]},
-    {"route": "/sessions", "roles": ["contributor"]},
-    {"route": "/*/topics", "roles": ["admin", "contributor"]}
+    {"route": "/sessions", "roles": ["admin", "user"]},
+    {"route": "/topics", "roles": ["admin", "user"]},
+    {"route": "/topics/*", "roles": ["admin", "user"]}
   ]
 }

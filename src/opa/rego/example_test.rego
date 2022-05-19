@@ -11,11 +11,11 @@ admin_token := io.jwt.encode_sign({
   "k": "test-signing-key"
 })
 
-contributor_token := io.jwt.encode_sign({
+user_token := io.jwt.encode_sign({
   "typ": "JWT",
   "alg": "HS256"
 }, {
-  "roles": ["contributor"]
+  "roles": ["user"]
 }, {
   "kty": "oct",
   "k": "test-signing-key"
@@ -32,50 +32,74 @@ empty_token := io.jwt.encode_sign({
 })
 
 ### Execute tests
-test_speakers_true {
+test_speakers_admin_true {
   allow with input as {
     "token": admin_token,
-    "route": "/conference/speakers",
+    "route": "/speakers",
     "operation": "GET"
   }
 }
 
-test_speakers_false {
+test_sessions_admin_true {
+  allow with input as {
+    "token": admin_token,
+    "route": "/sessions",
+    "operation": "GET"
+  }
+}
+
+test_topics_admin_true {
+  allow with input as {
+    "token": admin_token,
+    "route": "/topics",
+    "operation": "GET"
+  }
+}
+
+test_speakers_user_false {
+  not allow with input as {
+    "token": user_token,
+    "route": "/speakers",
+    "operation": "GET"
+  }
+}
+
+test_speakers_empty_false {
   not allow with input as {
     "token": empty_token,
-    "route": "/conference/speakers",
+    "route": "/speakers",
     "operation": "GET"
   }
 }
 
-test_sessions_true {
+test_sessions_user_true {
   allow with input as {
-    "token": contributor_token,
-    "route": "/conference/sessions",
+    "token": user_token,
+    "route": "/sessions",
     "operation": "GET"
   }
 }
 
-test_sessions_false {
+test_sessions_user_post_false {
   not allow with input as {
-    "token": admin_token,
-    "route": "/conference/sessions",
-    "operation": "GET"
+    "token": user_token,
+    "route": "/sessions",
+    "operation": "POST"
   }
 }
 
-test_topics_true {
+test_topics_user_true {
   allow with input as {
-    "token": admin_token,
-    "route": "/conference/topics",
+    "token": user_token,
+    "route": "/topics",
     "operation": "GET"
   }
 }
 
-test_topics_false {
-  not allow with input as {
-    "token": admin_token,
-    "route": "/conference/topics/1234",
+test_topics_id_users_true {
+  allow with input as {
+    "token": user_token,
+    "route": "/topics/1234",
     "operation": "GET"
   }
 }
